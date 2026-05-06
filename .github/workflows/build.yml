@@ -28,12 +28,18 @@ jobs:
           pyinstaller --onefile --noconsole --name FaxineiroNVIDIA faxineiro.py
           pyinstaller --onefile --noconsole --name Uninstall uninstall.py
 
+      - name: Package ZIP
+        run: |
+          mkdir FaxineiroNVIDIA
+          copy dist\FaxineiroNVIDIA.exe FaxineiroNVIDIA\
+          copy dist\Uninstall.exe FaxineiroNVIDIA\
+          Compress-Archive -Path FaxineiroNVIDIA -DestinationPath FaxineiroNVIDIA.zip
+        shell: pwsh
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            dist/FaxineiroNVIDIA.exe
-            dist/Uninstall.exe
+          files: FaxineiroNVIDIA.zip
           name: "Faxineiro NVIDIA ${{ github.ref_name }}"
           body: |
             ## Como usar
