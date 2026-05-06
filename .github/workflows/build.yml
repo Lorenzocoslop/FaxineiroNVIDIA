@@ -1,0 +1,37 @@
+name: Build Windows EXE
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PyInstaller
+        run: pip install pyinstaller
+
+      - name: Build EXE
+        run: pyinstaller --onefile --noconsole --name FaxineiroNVIDIA faxineiro.py
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/FaxineiroNVIDIA.exe
+          name: "Faxineiro NVIDIA ${{ github.ref_name }}"
+          body: |
+            ## Como usar
+            1. Baixe `FaxineiroNVIDIA.exe`
+            2. Clique duas vezes
+            3. Configure o caminho da pasta DXCache (Enter aceita o padrão detectado)
+            4. Pronto — roda invisível em segundo plano e inicia com o Windows
