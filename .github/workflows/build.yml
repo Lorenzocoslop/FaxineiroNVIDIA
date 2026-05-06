@@ -20,16 +20,20 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install PyInstaller
-        run: pip install pyinstaller
+      - name: Install dependencies
+        run: pip install pyinstaller pystray pillow
 
       - name: Build EXE
-        run: pyinstaller --onefile --noconsole --name FaxineiroNVIDIA faxineiro.py
+        run: |
+          pyinstaller --onefile --noconsole --name FaxineiroNVIDIA faxineiro.py
+          pyinstaller --onefile --noconsole --name Uninstall uninstall.py
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/FaxineiroNVIDIA.exe
+          files: |
+            dist/FaxineiroNVIDIA.exe
+            dist/Uninstall.exe
           name: "Faxineiro NVIDIA ${{ github.ref_name }}"
           body: |
             ## Como usar
